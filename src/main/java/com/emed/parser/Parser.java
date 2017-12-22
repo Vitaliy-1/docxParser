@@ -1,9 +1,8 @@
 package com.emed.parser;
 
-import com.emed.docxClasses.DocxElement;
-import com.emed.docxClasses.ElementProperties;
-import com.emed.docxClasses.Par;
 import com.emed.docxClasses.Text;
+import com.emed.interfaces.DocxElement;
+import com.emed.interfaces.ElementProperties;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
@@ -16,27 +15,27 @@ public class Parser {
     @SuppressWarnings("unchecked")
     public static void main (String[] args) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
 
-        DocxArchive docxArchive = new DocxArchive(new File("example.docx"));
+        DocxArchive docxArchive = new DocxArchive(new File("table.docx"));
         DocxDocument docxDocument = docxArchive.getDocxDocument();
         List<DocxElement> docxElements = docxDocument.getContent();
         for (DocxElement docxElement : docxElements) {
-            /*
+
             if (docxElement.getClass().getName().equals("com.emed.docxClasses.Par")) {
                 List<ElementProperties> parPrs = docxElement.getProperties();
                 for (ElementProperties parPr : parPrs) {
-                    System.out.println("properties of a new paragraph: " + parPr.getPropertyName());
+                    //System.out.println("properties of a new paragraph: " + parPr.getPropertyName());
                 }
                 List<Text> texts =  docxElement.getContent();
                 for (Text text : texts) {
                     for (ElementProperties elementProperties : text.getProperties()) {
-                        System.out.println("prop: " + elementProperties.getPropertyName());
+                        //System.out.println("prop: " + elementProperties.getPropertyName());
                         Map map = elementProperties.getPropertyMap();
-                        map.forEach((k,v) -> System.out.println("name: "+k+" --- value: " +v));
+                        //map.forEach((k,v) -> System.out.println("name: "+k+" --- value: " +v));
                     }
-                    System.out.println("text: " + text.getText());
+                    //System.out.println("text: " + text.getText());
                 }
             }
-            */
+
         }
     }
 

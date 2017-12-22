@@ -1,4 +1,4 @@
-package com.emed.docxClasses;
+package com.emed.interfaces;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.util.List;

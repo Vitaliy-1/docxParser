@@ -1,6 +1,6 @@
 package com.emed.parser;
 
-import com.emed.docxClasses.DocxElement;
+import com.emed.interfaces.DocxElement;
 import com.emed.docxClasses.Par;
 import com.emed.docxClasses.Table;
 import org.w3c.dom.Document;
@@ -24,7 +24,7 @@ import java.util.List;
 public class DocxDocument {
 
     public static XPath documentXpath;
-    public static Document document;
+    private Document domDocument;
     private List<DocxElement> docxElements;
 
     public DocxDocument(FileSystem zipFS) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException {
@@ -32,11 +32,11 @@ public class DocxDocument {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        document = documentBuilder.parse(Files.newInputStream(documentXmlPath));
+        this.domDocument = documentBuilder.parse(Files.newInputStream(documentXmlPath));
         documentXpath = XPathFactory.newInstance().newXPath();
 
         /* Get Namespace from XML Document for XPath */
-        NamedNodeMap namedNodeMap = document.getDocumentElement().getAttributes();
+        NamedNodeMap namedNodeMap = domDocument.getDocumentElement().getAttributes();
         HashMap<String, String> namespaceMap = new HashMap<String, String>();
         if (namedNodeMap != null) {
             for (int i = 0; i < namedNodeMap.getLength(); i++) {
@@ -49,22 +49,32 @@ public class DocxDocument {
 
         /* Initialize content of DOCX document.xml */
         XPathExpression expr = documentXpath.compile("//w:body/child::node()");
-        NodeList nodeList = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+        NodeList nodeList = (NodeList) expr.evaluate(domDocument, XPathConstants.NODESET);
         List<DocxElement> docxElements = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
-            if (node.getNodeName().contains("w:p")) {
-                Par par = new Par(node);
-                docxElements.add(par);
-            } else if (node.getNodeName().contains("w:tbl")) {
+            if (node.getNodeName().contains("w:tbl")) {
                 Table table = new Table(node);
                 docxElements.add(table);
+            } else if (node.getNodeName().contains("w:p")) {
+                Par par = new Par(node);
+                docxElements.add(par);
             }
         }
         this.docxElements = docxElements;
     }
 
+    private boolean isTableTitle(Node node) throws XPathExpressionException {
+        XPathExpression expr = documentXpath.compile("w:r/w:t");
+        NodeList nodeList = (NodeList) expr.evaluate(node, XPathConstants.NODESET);
+
+        return true;
+    }
+
     public List<DocxElement> getContent() throws XPathExpressionException {
         return docxElements;
+    }
+    public Document getDocument() {
+        return domDocument;
     }
 }

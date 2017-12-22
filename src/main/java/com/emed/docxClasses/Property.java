@@ -1,5 +1,6 @@
 package com.emed.docxClasses;
 
+import com.emed.interfaces.ElementProperties;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 

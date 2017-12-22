@@ -1,5 +1,7 @@
 package com.emed.docxClasses;
 
+import com.emed.interfaces.DocxElement;
+import com.emed.interfaces.ElementProperties;
 import com.emed.parser.DocxDocument;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

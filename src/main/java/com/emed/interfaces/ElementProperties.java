@@ -1,4 +1,4 @@
-package com.emed.docxClasses;
+package com.emed.interfaces;
 
 import java.util.Map;
 
